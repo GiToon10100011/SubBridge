@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.venv-*/
+
+# Translation lab: OpenSubtitles text is copyrighted and this repo is public,
+# so the raw dataset and every file holding subtitle lines stay local.
+translation-lab/data/
+translation-lab/reports/**/*.csv
