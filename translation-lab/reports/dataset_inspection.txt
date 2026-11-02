@@ -1,0 +1,14 @@
+Total pairs: 1,188,550
+
+[Categories]
+candidate: 1,160,687 (97.66%)
+review: 27,803 (2.34%)
+rejected: 60 (0.01%)
+
+[Reasons]
+weak_korean: 13,385
+length_ratio: 10,622
+weak_japanese: 8,841
+suspicious_character: 60
+encoding_error: 54
+too_long: 1
