@@ -1,0 +1,21 @@
+# 빌드 산출물과 실험 전용 Cargo 홈(의존성 소스 캐시)은 재생성 가능하므로 추적하지 않는다
+/target/
+/.cargo-home/
+
+# LGPL 최소 FFmpeg 빌드(scripts/build_ffmpeg_lgpl.sh)의 소스·빌드 디렉터리
+/.ffmpeg-lgpl/
+
+# 크기 측정용 보조 크레이트의 빌드 산출물
+/size-probe/target/
+
+# Windows 로 옮기기 위해 만든 픽스처 압축본 (저장소에 올리지 않는다)
+*.zip
+
+# 생성된 오디오 픽스처(약 124 MB 이상)는 generate.sh 로 재생성하거나 복사한다.
+# 재현성은 fixtures/manifest.csv 의 SHA-256 으로 보증한다.
+/fixtures/generated/
+
+# 변환 출력 WAV와 스모크 테스트 출력
+/results/**/outputs/
+/results/macos/smoke/
+/results/windows/smoke/

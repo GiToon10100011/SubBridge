@@ -1,0 +1,46 @@
+id,file,group,description,nominal_duration_s,expected_outcome,lossless,codec_frame_size,expected_rms,expected_tones,tracks_to_test
+F01,F01_wav_pcm16_mono_44k1.wav,basic,WAV PCM 16-bit mono 44.1kHz two tones,10,ok,1,0,0.31623,440:0.4;880:0.2,default
+F02,F02_wav_pcm24_stereo_48k.wav,basic,WAV PCM 24-bit stereo 48kHz L440 R660,10,ok,1,0,0.25,440:0.25;660:0.25,default
+F03,F03_wav_pcm16_stereo_48k.wav,basic,WAV PCM 16-bit stereo 48kHz L440 R660,10,ok,1,0,0.25,440:0.25;660:0.25,default
+F04,F04_mp3_cbr128_stereo_44k1.mp3,basic,MP3 CBR 128k stereo 44.1kHz,10,ok,0,1152,0.25,440:0.25;660:0.25,default
+F05,F05_mp3_vbr_q2_stereo_44k1.mp3,basic,MP3 VBR q2 stereo 44.1kHz,10,ok,0,1152,0.25,440:0.25;660:0.25,default
+F06,F06_flac_stereo_44k1.flac,basic,FLAC 16-bit stereo 44.1kHz,10,ok,1,0,0.25,440:0.25;660:0.25,default
+F07,F07_m4a_aac_lc_stereo_44k1.m4a,basic,M4A AAC-LC 128k stereo 44.1kHz,10,ok,0,1024,0.25,440:0.25;660:0.25,default
+F08,F08_m4a_alac_stereo_44k1.m4a,basic,M4A ALAC stereo 44.1kHz,10,ok,1,0,0.25,440:0.25;660:0.25,default
+F09,F09_mp4_h264_aac.mp4,basic,MP4 with H.264 video + AAC-LC audio,10,ok,0,1024,0.25,440:0.25;660:0.25,default
+F10,F10_mov_h264_aac.mov,basic,MOV (QuickTime) with H.264 video + AAC-LC audio,10,ok,0,1024,0.25,440:0.25;660:0.25,default
+F11,F11_mkv_h264_aac.mkv,basic,MKV with H.264 video + AAC-LC audio,10,ok,0,1024,0.25,440:0.25;660:0.25,default
+F12,F12_mkv_h264_flac.mkv,basic,MKV with H.264 video + FLAC audio,10,ok,1,0,0.25,440:0.25;660:0.25,default
+F13,F13_mp4_multitrack_2aac.mp4,basic,MP4 video + 2 AAC audio tracks (eng default 440Hz; jpn 880Hz),10,ok,0,1024,,t0@440:0.5;t1@880:0.5,0|1
+F14,F14_mkv_multitrack_aac_flac_ac3.mkv,basic,MKV video + AAC (jpn default 440Hz) + FLAC (eng 880Hz) + AC-3 (und 1320Hz),10,ok,0,1536,,t0@440:0.5;t1@880:0.5;t2@1320:0.5,0|1|2
+F13B,F13B_mp4_default_is_second.mp4,basic,MP4 video + 2 AAC audio tracks; DEFAULT disposition on the SECOND track (eng 440Hz non-default; jpn 880Hz default),10,ok,0,1024,,880:0.5,default
+F14B,F14B_mkv_default_is_second.mkv,basic,MKV video + AAC (und 440Hz non-default) + FLAC (jpn 880Hz DEFAULT second track),10,ok,1,0,,880:0.5,default
+F15,F15_m4a_aac_short_0s5.m4a,basic,M4A AAC-LC mono 44.1kHz 0.5 seconds,0.5,ok,0,1024,0.35355,440:0.5,default
+F16,F16_m4a_aac_stereo_61min.m4a,perf,M4A AAC-LC 64k stereo 44.1kHz 61 minutes (60s sweep looped),3660,ok,0,1024,,,default
+F17,F17_mp3_truncated.mp3,basic,F04 truncated at 60 percent of its bytes,,ok_or_error,0,1152,,,default
+F17B,F17B_m4a_truncated.m4a,basic,F07 truncated at 60 percent of its bytes (moov atom lost),,ok_or_error,0,1024,,,default
+F18,F18_mp4_corrupt_header.mp4,basic,F09 with bytes 4-11 (ftyp) zeroed,,ok_or_error,0,0,,,default
+F18B,F18B_mkv_corrupt_header.mkv,basic,F12 with first 16 bytes (EBML header) zeroed,,ok_or_error,0,0,,,default
+F18C,F18C_mp4_corrupt_moov.mp4,basic,F09 with its last 4000 bytes zeroed (moov atom destroyed),,ok_or_error,0,0,,,default
+X01,X01_mkv_h264_ac3.mkv,fallback,MKV video + AC-3 audio (Symphonia has no AC-3 decoder),10,ok,0,1536,0.25,440:0.25;660:0.25,default
+X02,X02_asf_wma.wma,fallback,WMA v2 in ASF container,10,ok,0,2048,0.25,440:0.25;660:0.25,default
+X03,X03_ogg_opus.opus,fallback,Opus in Ogg 48kHz stereo,10,ok,0,960,0.25,440:0.25;660:0.25,default
+X05,X05_wav_float32_stereo_48k.wav,fallback,WAV 32-bit float stereo 48kHz,10,ok,1,0,0.25,440:0.25;660:0.25,default
+S01,S01_stereo_inphase.wav,special,stereo 48k L=R 440Hz amp 0.5 (mean downmix keeps 0.5),10,ok,1,0,0.35355,440:0.5,default
+S02,S02_stereo_level_diff.wav,special,stereo 48k L amp 0.5 R amp 0.1 440Hz (mean 0.3),10,ok,1,0,0.21213,440:0.3,default
+S03,S03_stereo_left_only.wav,special,stereo 48k only L amp 0.5 (mean 0.25),10,ok,1,0,0.17678,440:0.25,default
+S04,S04_stereo_right_only.wav,special,stereo 48k only R amp 0.5 (mean 0.25),10,ok,1,0,0.17678,440:0.25,default
+S05,S05_stereo_phase_inverted.wav,special,stereo 48k R = -L 440Hz amp 0.5 (mean cancels to 0),10,ok,1,0,0,440:0,default
+S06,S06_stereo_different_freq.wav,special,stereo 48k L 440Hz R 1000Hz amp 0.5 (both tones amp 0.25),10,ok,1,0,0.25,440:0.25;1000:0.25,default
+SR08,SR08_mono_8000.wav,samplerate,mono 8kHz 1kHz tone amp 0.5,10,ok,1,0,0.35355,1000:0.5,default
+SR16,SR16_mono_16000.wav,samplerate,mono 16kHz 1kHz tone amp 0.5,10,ok,1,0,0.35355,1000:0.5,default
+SR22,SR22_mono_22050.wav,samplerate,mono 22.05kHz 1kHz tone amp 0.5,10,ok,1,0,0.35355,1000:0.5,default
+SR44,SR44_mono_44100.wav,samplerate,mono 44.1kHz 1kHz tone amp 0.5,10,ok,1,0,0.35355,1000:0.5,default
+SR48,SR48_mono_48000.wav,samplerate,mono 48kHz 1kHz tone amp 0.5,10,ok,1,0,0.35355,1000:0.5,default
+SR96,SR96_mono_96000.wav,samplerate,mono 96kHz 1kHz tone amp 0.5,10,ok,1,0,0.35355,1000:0.5,default
+CH06,CH06_surround_5_1_48k.wav,channels,5.1 (6ch) 48k each channel a different tone amp 0.3 (mean of 6 -> 0.05 each),10,ok,1,0,0.08660,220:0.05;330:0.05;440:0.05;110:0.05;550:0.05;660:0.05,default
+P01A,P01A_m4a_aac_1min.m4a,perf,M4A AAC-LC 64k stereo 44.1kHz 1 minute,60,ok,0,1024,,,default
+P10A,P10A_m4a_aac_10min.m4a,perf,M4A AAC-LC 64k stereo 44.1kHz 10 minutes,600,ok,0,1024,,,default
+P01M,P01M_mp3_1min.mp3,perf,MP3 CBR 96k stereo 44.1kHz 1 minute,60,ok,0,1152,,,default
+P10M,P10M_mp3_10min.mp3,perf,MP3 CBR 96k stereo 44.1kHz 10 minutes,600,ok,0,1152,,,default
+P60M,P60M_mp3_61min.mp3,perf,MP3 CBR 96k stereo 44.1kHz 61 minutes,3660,ok,0,1152,,,default

@@ -1,0 +1,22 @@
+# Symphonia 유무에 따른 릴리스 바이너리 크기 차이를 재기 위한 최소 크레이트 (U1 보조 실험).
+# 본 실험 크레이트와 독립이며 빈 [workspace] 로 상위 Cargo.toml 의 영향을 받지 않게 한다.
+[package]
+name = "size_probe"
+version = "0.1.0"
+edition = "2024"
+
+[workspace]
+
+[features]
+sym = ["dep:symphonia"]
+
+[dependencies]
+symphonia = { version = "=0.6.1", features = ["all"], optional = true }
+
+# 앱 배포용에 가까운 프로파일
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = true
+panic = "abort"

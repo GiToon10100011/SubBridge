@@ -1,0 +1,121 @@
+platform,fixture_id,group,track,mode,expected_outcome,runs_ok,runs,decoder_used,fallback,fallback_reason,symphonia_error_category,error_category,error_message,verdict,note
+macos-aarch64,F01,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xa2b028280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F01,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F01,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F02,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x72b028280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F02,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F02,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F03,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x859024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F03,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F03,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F04,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x7f5024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F04,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F04,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F05,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x82d028280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F05,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F05,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F06,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xb0b024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F06,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F06,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F07,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x945027700] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F07,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F07,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F08,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x7ad024500] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F08,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F08,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F09,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x909027700] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F09,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F09,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F10,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xc63027700] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F10,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F10,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F11,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xbcb02b480] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F11,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F11,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F12,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xb09020280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F12,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F12,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F13,basic,0,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x98b023c00] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F13,basic,0,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F13,basic,0,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F13,basic,1,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x8d4c17c00] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F13,basic,1,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F13,basic,1,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F14,basic,0,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xc8302b980] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F14,basic,0,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F14,basic,0,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F14,basic,1,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x84d02b980] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F14,basic,1,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F14,basic,1,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F14,basic,2,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xbaf027980] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F14,basic,2,hybrid,ok,0,3,ffmpeg,true,UnsupportedCodec: unsupported: core (codec): unsupported audio codec -> fallback to ffmpeg,UnsupportedCodec,CorruptInput,exit=Some(234): [AVFormatContext @ 0x93d027980] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F14,basic,2,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F15,basic,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xbcec17700] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,F15,basic,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,F15,basic,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,F17,basic,,ffmpeg,ok_or_error,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xbe1024280] Requested output format 'f32le' is not known.,PASS,failed cleanly
+macos-aarch64,F17,basic,,hybrid,ok_or_error,3,3,symphonia,false,,,,,PASS,recovered and produced valid output
+macos-aarch64,F17,basic,,ffmpeg-native,ok_or_error,3,3,ffmpeg-native,false,,,,,PASS,recovered and produced valid output
+macos-aarch64,F17B,basic,,ffmpeg,ok_or_error,0,3,ffmpeg,false,,,ParseFailure,"exit=Some(1): [mov,mp4,m4a,3gp,3g2,mj2 @ 0xa48c10000] moov atom not found",PASS,failed cleanly
+macos-aarch64,F17B,basic,,hybrid,ok_or_error,0,3,ffmpeg,true,UnsupportedContainer: unsupported: isomp4: missing moov atom -> fallback to ffmpeg,UnsupportedContainer,ParseFailure,"exit=Some(1): [mov,mp4,m4a,3gp,3g2,mj2 @ 0x8ccc10000] moov atom not found",PASS,failed cleanly
+macos-aarch64,F17B,basic,,ffmpeg-native,ok_or_error,0,3,ffmpeg-native,false,,,ParseFailure,"exit=Some(1): [mov,mp4,m4a,3gp,3g2,mj2 @ 0x7c0c10000] moov atom not found",PASS,failed cleanly
+macos-aarch64,F18,basic,,ffmpeg,ok_or_error,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xa8d027700] Requested output format 'f32le' is not known.,PASS,failed cleanly
+macos-aarch64,F18,basic,,hybrid,ok_or_error,0,3,ffmpeg,true,UnsupportedContainer: unsupported: core (probe): no suitable format reader found -> fallback to ffmpeg,UnsupportedContainer,CorruptInput,exit=Some(234): [AVFormatContext @ 0x901027700] Requested output format 'f32le' is not known.,PASS,failed cleanly
+macos-aarch64,F18,basic,,ffmpeg-native,ok_or_error,3,3,ffmpeg-native,false,,,,,PASS,recovered and produced valid output
+macos-aarch64,F18B,basic,,ffmpeg,ok_or_error,0,3,ffmpeg,false,,,CorruptInput,"exit=Some(1): [matroska,webm @ 0x733034000] 0x00 at pos 0 (0x0) invalid as first byte of an EBML number",PASS,failed cleanly
+macos-aarch64,F18B,basic,,hybrid,ok_or_error,0,3,symphonia,false,no fallback: ParseFailure is not an allowed fallback category,ParseFailure,ParseFailure,no audio packets found,PASS,failed cleanly
+macos-aarch64,F18B,basic,,ffmpeg-native,ok_or_error,0,3,ffmpeg-native,false,,,CorruptInput,"exit=Some(1): [matroska,webm @ 0x929034000] 0x00 at pos 0 (0x0) invalid as first byte of an EBML number",PASS,failed cleanly
+macos-aarch64,F18C,basic,,ffmpeg,ok_or_error,0,3,ffmpeg,false,,,ParseFailure,no audio stream in container,PASS,failed cleanly
+macos-aarch64,F18C,basic,,hybrid,ok_or_error,0,3,symphonia,false,no fallback: ParseFailure is not an allowed fallback category,ParseFailure,ParseFailure,malformed stream: isomp4: unknown size atom has sized parent,PASS,failed cleanly
+macos-aarch64,F18C,basic,,ffmpeg-native,ok_or_error,0,3,ffmpeg-native,false,,,ParseFailure,no audio stream in container,PASS,failed cleanly
+macos-aarch64,X01,fallback,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x945024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X01,fallback,,hybrid,ok,0,3,ffmpeg,true,UnsupportedCodec: unsupported: core (codec): unsupported audio codec -> fallback to ffmpeg,UnsupportedCodec,CorruptInput,exit=Some(234): [AVFormatContext @ 0xa27024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X01,fallback,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,X02,fallback,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x763020280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X02,fallback,,hybrid,ok,0,3,ffmpeg,true,UnsupportedContainer: unsupported: core (probe): no suitable format reader found -> fallback to ffmpeg,UnsupportedContainer,CorruptInput,exit=Some(234): [AVFormatContext @ 0x881028280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X02,fallback,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,X03,fallback,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x9ccc15180] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X03,fallback,,hybrid,ok,0,3,ffmpeg,true,UnsupportedCodec: unsupported: core (codec): unsupported audio codec -> fallback to ffmpeg,UnsupportedCodec,CorruptInput,exit=Some(234): [AVFormatContext @ 0x8cb025180] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X03,fallback,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,X05,fallback,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xc81024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,X05,fallback,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,X05,fallback,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,S01,special,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x969020280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,S01,special,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,S01,special,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,S02,special,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xbf1024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,S02,special,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,S02,special,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,S03,special,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xca1024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,S03,special,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,S03,special,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,S04,special,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x826c14280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,S04,special,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,S04,special,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,S05,special,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x7e9024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,S05,special,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,S05,special,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,S06,special,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x779024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,S06,special,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,S06,special,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,SR08,samplerate,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x7b7024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,SR08,samplerate,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,SR08,samplerate,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,SR16,samplerate,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x841024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,SR16,samplerate,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,SR16,samplerate,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,SR22,samplerate,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x8b4c14280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,SR22,samplerate,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,SR22,samplerate,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,SR44,samplerate,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x851024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,SR44,samplerate,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,SR44,samplerate,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,SR48,samplerate,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xa23024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,SR48,samplerate,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,SR48,samplerate,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,SR96,samplerate,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0xab8c14280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,SR96,samplerate,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,SR96,samplerate,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
+macos-aarch64,CH06,channels,,ffmpeg,ok,0,3,ffmpeg,false,,,CorruptInput,exit=Some(234): [AVFormatContext @ 0x8d3024280] Requested output format 'f32le' is not known.,FAIL,all runs failed
+macos-aarch64,CH06,channels,,hybrid,ok,3,3,symphonia,false,,,,,PASS,
+macos-aarch64,CH06,channels,,ffmpeg-native,ok,3,3,ffmpeg-native,false,,,,,PASS,
