@@ -1,0 +1,7 @@
+﻿
+Hash                                                             Path                                                  
+----                                                             ----                                                  
+72A489ECCD008C2EC2C0A5856C5C75BC3D8BBFA90166C4566865C246445E6AA3 C:\Users\<user>\AppData\Local\Microsoft\WinGet\Pack...
+19202B23C0043F15AD1B7BCE2344F406FD52BD6EFD8F995CE02E7392A1CEC52F C:\Users\<user>\AppData\Local\Microsoft\WinGet\Pack...
+
+

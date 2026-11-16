@@ -10,8 +10,8 @@ SubBridge 의 오디오 디코드·변환 후보 세 가지를 **같은 조건**
 
 **어느 후보도 사전에 채택하지 않았다.** 이 프로젝트는 근거를 모으고 추천만 한다. 최종 채택과 SubBridge 본 문서 수정은 별도 승인 대상이다.
 
-**상태: macOS(arm64) 검증 완료, Windows(x86_64) NOT_RUN → U1 전체 검증은 완료되지 않았다.**
-결과 요약은 [`results/U1_TECHNICAL_VALIDATION.md`](results/U1_TECHNICAL_VALIDATION.md), Windows 절차는 [`results/windows/WINDOWS_CHECKLIST.md`](results/windows/WINDOWS_CHECKLIST.md).
+**상태: macOS(arm64) 검증 완료, Windows(x86_64)는 호환성 세트만 실행(성능·LGPL 번들·백신 NOT_RUN) → U1 전체 검증은 완료되지 않았다.**
+결과 요약은 [`results/U1_TECHNICAL_VALIDATION.md`](results/U1_TECHNICAL_VALIDATION.md), Windows 실행 결과와 남은 항목은 [`results/windows/WINDOWS_CHECKLIST.md`](results/windows/WINDOWS_CHECKLIST.md).
 
 ## 디렉터리 구조
 
@@ -36,14 +36,16 @@ fixtures/
 results/
   macos/                       compatibility/audio_quality/performance/decoder_compare CSV, runs*.jsonl
   macos/lgpl_ffmpeg/           ★ 같은 매트릭스를 LGPL 최소 FFmpeg 로 다시 돌린 결과
-  windows/                     WINDOWS_CHECKLIST.md (NOT_RUN)
-  compatibility.csv  performance.csv  audio_quality.csv   macos + windows(NOT_RUN 표식) 합본
+  windows/                     WINDOWS_CHECKLIST.md + 호환성 세트 결과 CSV/JSONL (W8–W10 NOT_RUN)
+  compatibility.csv  performance.csv  audio_quality.csv   macos + windows 합본 (Windows 성능 세트는 NOT_RUN 표식 행)
   decoder_compare.csv          ★ 디코더 간 비교
   U1_TECHNICAL_VALIDATION.md   최종 보고서
 licenses/THIRD_PARTY_NOTICES.md
 scripts/
   build_ffmpeg_lgpl.sh         ★ LGPL 최소 FFmpeg 소스 빌드 (번들 가능성 검증)
-  windows_run.ps1              ★ Windows 재현 스크립트 (NOT_RUN)
+  windows_run.ps1              ★ Windows 재현 스크립트 (첫 실행에서 나온 결함 4건을 고침. -PerfOnly/-ResultsDir/-SkipPathTest 추가. Windows 에서 다시 돌리기 전까지 [UNVERIFIED])
+  windows_bundle_check.ps1     ★ Windows FFmpeg 번들 점검 (W9 크기·의존 DLL·-L, W10 첫 실행 시간·Defender). 기록만 하고 판정하지 않음. [UNVERIFIED]
+  compare_wavs.py              ★ 두 outputs 폴더의 WAV 를 샘플 단위로 비교 (W6). macOS 에서 자체 시험함
   assemble_results.py          ★ 플랫폼별 CSV → results/ 합본
 size-probe/                    ★ Symphonia 유무에 따른 바이너리 크기 차이 측정용 보조 크레이트
 .gitignore                     ★ target/, .cargo-home/, .ffmpeg-lgpl/, fixtures/generated/, 출력 WAV
@@ -137,7 +139,8 @@ Rust 1.99.1 / edition 2024. 직접 의존성: symphonia 0.6.1(`all`), rubato 5.1
 
 ## 알려진 한계
 
-- Windows 미검증. Windows 전용 코드(`metrics.rs` 의 `cfg(windows)`)는 컴파일해 보지 못했다.
+- Windows 는 호환성 세트(39개 픽스처)만 실행했다(Windows 10, 한 대). 성능(1·10·61분), LGPL FFmpeg 번들, 백신/SmartScreen 은 NOT_RUN. `cfg(windows)` 코드는 컴파일·실행됐지만 자식 프로세스 메모리·CPU 는 측정하지 않는다.
+- 크로스 플랫폼 출력 SHA 는 151쌍 중 87쌍이 다르다(샘플 수·레벨은 같음, 샘플 단위 비교는 하지 않음).
 - 픽스처가 전부 **합성 신호이며 FFmpeg 인코더로 만든 것**이다. 다른 인코더, HE-AAC, 복잡한 편집 목록, 실제 영상 파일은 포함되지 않았다.
 - 디스크 캐시: 입력을 한 번 읽어 둔 **warm cache** 상태에서만 측정했다. 콜드 캐시는 `purge`(관리자 권한)가 필요해 NOT_RUN.
 - 음질(지각)이나 ASR 정확도는 평가하지 않았다. 이 실험은 디코드·변환의 정합성만 본다.
