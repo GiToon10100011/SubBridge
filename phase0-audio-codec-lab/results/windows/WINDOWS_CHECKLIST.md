@@ -1,7 +1,7 @@
-# Windows x86_64 검증 체크리스트 — 상태: **부분 실행 (W1–W5·W7 PASS, W6·W9·W10 부분, W8 NOT_RUN)**
+# Windows x86_64 검증 체크리스트 — 상태: **부분 실행 (W1–W5·W7·W8 PASS, W6·W9·W10 부분)**
 
 2026-11-16 에 실제 Windows 10 x86_64 한 대에서 호환성 세트(39개 픽스처)를 실행했다. 같은 날 LGPL 후보 빌드(BtbN 정적 빌드)로 호환성 세트를 다시 돌리고, 번들 관련 사실을 기록하고, 일부 출력 WAV 를 받아 샘플 단위로 비교했다.
-**1·10·61분 성능 세트(W8)는 하지 않았다 (NOT_RUN).** W9 는 후보 정적 빌드만 봤고 우리가 쓸 최소 빌드가 아니다. W10 은 SmartScreen 경로를 시험하지 못했다.
+**1·10·61분 성능 세트(W8)도 실행했다**(`-PerfOnly`, Gyan GPL 빌드, 웜 캐시, 자식 프로세스 메모리·CPU 는 측정 못 함). W9 는 후보 정적 빌드만 봤고 우리가 쓸 최소 빌드가 아니다. W10 은 SmartScreen 경로를 시험하지 못했다.
 따라서 **U1 은 아직 완료로 선언하지 않는다.** 아래 PASS 는 "실행한 범위 안에서" 라는 뜻이다.
 
 ## 실행 환경 (`environment.json` 에서 옮김)
@@ -30,9 +30,19 @@
 | W5 | Windows 간 반복 | 같은 입력 3회 → 출력 SHA 동일 | **PASS** | 불안정 그룹 0건 |
 | W6 | 크로스 플랫폼 샘플 일치 | 같은 모드의 macOS·Windows 출력 비교 | **PARTIAL (표본 측정)** | 12개 픽스처 48개 파일: 샘플 수 모두 같음, 41개가 ±1 LSB 로 다르고 7개는 동일. 원인 미확인, 허용 기준 미정. 아래 설명 |
 | W7 | 공백·한글 경로 | `path_test.jsonl` 3모드 성공 | **PASS (수동 실행)** | 아래 설명 |
-| W8 | 성능 | 1·10·61분 ×3회. 플랫폼 내부 분석만 | **NOT_RUN** | `-PerfOnly` 아직 실행 전 |
+| W8 | 성능 | 1·10·61분 ×3회. 플랫폼 내부 분석만 | **PASS (범위 한정)** | 6개 픽스처 × 4모드 × 3회 = 72행 전부 성공. Gyan GPL 빌드 한정. 아래 설명 |
 | W9 | FFmpeg 번들 | LGPL 빌드의 크기, 의존 DLL 목록, `-L`, `-buildconf`, 외부 라이브러리 | **PARTIAL** | 후보 **정적** LGPL 빌드의 사실과 호환성 재실행(PASS)은 확인. 크기는 최소 빌드를 대표하지 않고, DLL 목록은 근사치, 최소 빌드는 만들지 않았다. 아래 설명 |
 | W10 | 바이러스 백신/SmartScreen | 번들 FFmpeg 실행 시 차단·지연 여부 | **PARTIAL (증거 약함)** | 문제를 못 봤을 뿐 SmartScreen 경로는 시험하지 못했다. 아래 설명 |
+
+### W8 — 성능 세트 (Gyan GPL 빌드 한정)
+
+실행: `scripts\windows_run.ps1 -Ffmpeg "$g\ffmpeg.exe" -Ffprobe "$g\ffprobe.exe" -PerfOnly` (2026-11-16, 같은 Windows 10 머신). cargo 빌드 0.78 s, `verify-fixtures` 45 ok / 0 mismatched. 결과는 `*_perf` 접미사로 `results/windows/` 에 있다(`performance.csv`, `runs_perf.jsonl`, `compatibility_perf.csv`, `audio_quality_perf.csv`, `decoder_compare_perf.csv`, `environment_perf.json`, `ffmpeg_sha256_perf.txt`). 사용자 이름은 `<user>` 로 지웠다. 합본은 `python3 scripts/assemble_results.py` 로 다시 만들었다(Windows 성능 세트의 `PERF_SET` 표식 행이 실제 행으로 바뀜).
+
+- **성공:** 72행(F16 61분 AAC, P01A·P10A, P01M·P10M·P60M × symphonia / ffmpeg / ffmpeg-native / hybrid × 3회) 전부 `success=true`, fallback 0. 성능 세트 호환성 판정 24/24 PASS, 출력 규격 위반 0, 3회 반복 출력 동일 24/24. 출력 바이트 수는 24개 (파일, 모드) 모두 macOS 와 같다.
+- **시간(중앙값, 같은 머신 안에서만 해석):** 61분 AAC symphonia 5.47 s / ffmpeg 4.94 s / ffmpeg-native 2.82 s / hybrid 5.43 s, 61분 MP3 7.52 / 4.76 / 3.58 / 7.51 s. 1분 파일은 Symphonia 0.09–0.13 s, FFmpeg 모드 0.21–0.24 s. 전체 표는 보고서 §11. 가장 느린 1회는 8.0 s. 첫 실행과 반복 중앙값의 비는 0.90–1.06 이라 웜 캐시 측정이다.
+- **메모리:** 자기 프로세스 working set 만 있다. 9,720–11,308 KB 이고 길이에 따라 거의 늘지 않는다(1분 최대 10,236 / 10분 10,456 / 61분 11,308 KB). FFmpeg 자식의 메모리와 CPU 시간은 null.
+- **크로스 플랫폼 SHA:** 성능 세트 24쌍의 출력 SHA 는 **모두 macOS 와 다르다.** 성능 세트는 출력 파일을 지워서 W6 식 샘플 비교를 못 했다. 호환성 세트의 차이(±1 LSB)와 같은 종류로 보이지만 **[UNVERIFIED]**.
+- **하지 않은 것:** LGPL 후보·최소 빌드로 긴 파일 재기, 콜드 캐시, 자식 프로세스 메모리·CPU, 성능 출력의 샘플 비교(matrix 의 `--keep-outputs` 필요, `windows_run.ps1` 에는 노출 안 됨), 성능 세트 출력 삭제 성공 여부(받은 zip 의 `outputs` 가 비어 있었지만 사용자가 뺐는지 알 수 없다).
 
 ### W6 — 표본 측정, 원인 미확인
 
@@ -107,13 +117,14 @@
 5. (새로 발견) `windows_bundle_check.ps1` 의 `-L` 캡처에 배너가 섞인다 → `-hide_banner` 추가.
 
 **실제로 확인한 것:** 고친 `windows_run.ps1` 을 `-SkipPerf -SkipPathTest -ResultsDir results\windows_lgpl` 로 Windows 에서 실행했고 끝까지 정상 동작했다(cargo 빌드·`verify-fixtures` 45 ok·39개 픽스처 매트릭스, 종료 코드 0). `windows_bundle_check.ps1` 도 실행됐다(위 `-L` 결함은 이때 발견).
-**아직 확인하지 못한 것 [UNVERIFIED]:** `-PerfOnly`, 자동 경로 테스트(한글 리터럴·`try/finally`), cargo 실패 시 중단, 수정한 `-hide_banner`. 이 중 일부는 macOS 에 PowerShell 이 없어 구문 검사도 못 했다.
+**이어서 확인한 것:** `-PerfOnly` 도 Windows 에서 끝까지 정상 종료했다(위 W8).
+**아직 확인하지 못한 것 [UNVERIFIED]:** 자동 경로 테스트(한글 리터럴·`try/finally`), cargo 실패 시 중단, 수정한 `-hide_banner`. 이 중 일부는 macOS 에 PowerShell 이 없어 구문 검사도 못 했다.
 
 ## 측정 한계
 
 - Windows 의 `peak_rss_children_kb`, `cpu_user_s`, `cpu_sys_s` 는 **측정하지 않았다 (null)**. FFmpeg 자식 프로세스의 메모리·CPU 는 이 데이터로 알 수 없다.
 - `peak_rss_self_kb` 는 두 플랫폼에서 측정 방식이 달라(Windows = 최대 working set, macOS = 최대 RSS) 절대값을 비교하지 않는다 (Windows 중앙값 9.8 MB, macOS 3.9 MB).
-- 짧은 파일(호환성 세트 전체, 모드별 중앙값): Windows(Gyan) 는 symphonia 17.2 ms / ffmpeg 186.6 ms / hybrid 18.1 ms / ffmpeg-native 181.4 ms, macOS 는 6.5 / 44.0 / 7.6 / 41.9 ms. 디코더 사이 순서는 같다. (위 W9 의 값은 성공한 모든 행의 중앙값이라 이 값과 숫자가 조금 다르다. 이 줄의 집계 방식은 이번에 재현하지 못했다. Gyan 대 LGPL 비교는 같은 집계로 했고, 집계를 바꿔 봐도(전체 행 / 반복 행만 / 키별 중앙값) LGPL 이 ffmpeg 모드에서 14–17 % 느렸다.)
+- 짧은 파일(호환성 세트 전체, 모드별 중앙값): Windows(Gyan) 는 symphonia 18.0 ms / ffmpeg 190.7 ms / hybrid 18.3 ms / ffmpeg-native 184.1 ms, macOS 는 7.2 / 44.1 / 7.6 / 42.5 ms (성공한 모든 행의 중앙값). 디코더 사이 순서는 같다. (이 파일과 보고서의 앞선 판에 적었던 17.2 / 186.6 / 18.1 / 181.4 ms 와 6.5 / 44.0 / 7.6 / 41.9 ms 는 집계 방식을 알 수 없고 다시 계산해도 나오지 않아 위 값으로 바꿨다. Gyan 대 LGPL 비교는 같은 집계로 했고, 집계를 바꿔 봐도(전체 행 / 반복 행만 / 키별 중앙값) LGPL 이 ffmpeg 모드에서 14–17 % 느렸다.)
   Windows 의 FFmpeg 프로세스 기동이 눈에 띄게 크다(F15 0.5초 파일 185 ms, F03 237 ms; macOS 40·77 ms). 원인은 **확인하지 않았다** (큰 GPL 정적 exe, 백신 실시간 검사, 프로세스 생성 비용, i5-7400 의 성능 중 무엇인지 분리하지 못함).
   **다른 하드웨어이므로 플랫폼 간 절대 비교는 하지 않는다.**
 
@@ -121,7 +132,7 @@
 
 | 항목 | 할 일 | 누가 |
 |---|---|---|
-| **W8 (필수)** | Windows 에서 `scripts\windows_run.ps1 -Ffmpeg <Gyan ffmpeg.exe> -Ffprobe <Gyan ffprobe.exe> -PerfOnly`. 결과는 `*_perf` 접미사로 쓰여 앞선 실행을 덮어쓰지 않는다. 1·10·61분 ×3회 | 사용자 |
+| W8 (선택, 증거 보강) | **필수 범위는 끝났다.** 더 보려면: LGPL 후보·최소 빌드로 같은 성능 세트(`-Ffmpeg`/`-Ffprobe` 를 그 exe 로, `-ResultsDir` 를 다르게), FFmpeg 자식 프로세스 메모리·CPU 측정 코드 보강, `--keep-outputs` 로 성능 출력의 샘플 비교 | 사용자 + Claude |
 | W10 (선택, 증거 보강) | 인터넷 표시(`ZoneId=3`)가 붙은 `ffprobe.exe` 를 탐색기에서 더블클릭해 SmartScreen/백신 팝업 여부를 적는다. 그리고 ffmpeg.exe 에 표시가 없는 이유를 확인한다(`Get-Content <exe> -Stream Zone.Identifier`). `Unblock-File` 은 쓰지 않는다 | 사용자 |
 | W9 (선택, 증거 보강) | VS 개발자 명령 프롬프트의 `dumpbin /dependents`, zip 체크섬을 게시값과 대조. 크기 근거가 필요하면 MSYS2 에서 `scripts/build_ffmpeg_lgpl.sh` 로 최소 빌드(시험된 적 없음) | 사용자 + Claude |
 | W6 (선택) | 나머지 103개 출력도 샘플 비교, ±1 LSB 허용 기준 결정, 원인 분리(같은 rustc·같은 입력으로 symphonia 경로만 비교 등) | 사용자 결정 + Claude |
@@ -129,5 +140,5 @@
 ## Windows 에서 특히 볼 점 (macOS 결과에서 나온 위험) — 확인 결과
 
 - Symphonia 의 MP4/AAC priming delay 미트리밍(+497 샘플@16 kHz): Windows 에서도 **같은 값**이 나왔다 (F13B `symphonia~ffmpeg` `diff_samples = 497`). OS 와 무관한 현상이다.
-- 출력 파일 삭제: 성능 세트를 실행하지 않아 **확인하지 못했다.**
+- 출력 파일 삭제: 성능 세트는 실행했지만 삭제 성공 여부는 **확인하지 못했다**(코드가 `remove_dir_all` 오류를 무시하고, 받은 zip 의 `outputs` 가 비어 있었으나 사용자가 일부러 뺐는지 알 수 없다).
 - 줄바꿈(CRLF)과 긴 경로: **확인하지 못했다.**
