@@ -7,7 +7,8 @@
   SmartScreen 팝업은 GUI 에서만 뜨므로 이 스크립트가 잡지 못한다. 탐색기에서 exe 를 더블클릭해 본 결과는 사람이 따로 적는다.
 
   사용 (PowerShell, 랩 루트에서):
-    scripts\windows_bundle_check.ps1 -Ffmpeg C:\u1_lgpl\bin\ffmpeg.exe -Ffprobe C:\u1_lgpl\bin\ffprobe.exe -SourceUrl <내려받은 URL>
+    scripts\windows_bundle_check.ps1 -Ffmpeg <압축 푼 폴더>\bin\ffmpeg.exe -Ffprobe <압축 푼 폴더>\bin\ffprobe.exe -SourceUrl <내려받은 URL>
+  (<압축 푼 폴더> 는 이미 있는 폴더의 실제 경로다. 새로 만들 이름이 아니다 — 예: 탐색기에서 압축을 푼 위치)
   결과: -OutDir (기본 results\windows_lgpl\bundle_check) 아래 bundle_check.json 과 텍스트 파일들.
   의존 DLL: dumpbin.exe 가 PATH 에 있으면(VS 개발자 명령 프롬프트) 그것을 쓰고, 없으면 파일 안의 "*.dll" 문자열을 찾는다(근사치).
 #>
@@ -79,7 +80,8 @@ $bins = @()
 foreach ($k in "ffmpeg", "ffprobe") {
   $p = $ff[$k]
   $ver = Invoke-Native $p @("-version")
-  $lic = Invoke-Native $p @("-L")
+  # -hide_banner: Invoke-Native 가 stderr 를 합치므로 없으면 license_lines 에 버전 배너가 들어간다 (W9 첫 실행에서 실제로 그랬다)
+  $lic = Invoke-Native $p @("-hide_banner", "-L")
   $conf = Invoke-Native $p @("-buildconf")
   $conf_text = $conf.Lines -join " "
   $sig = Get-AuthenticodeSignature -LiteralPath $p

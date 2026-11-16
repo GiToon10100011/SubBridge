@@ -1,18 +1,18 @@
 # U1 기술 검증 보고서 — Symphonia / FFmpeg / Hybrid
 
-> **U1 전체 검증은 완료되지 않았다.** macOS(arm64)는 검증했고, **Windows(x86_64)는 호환성 세트(39개 픽스처)만 실행**했다(2026-11-16, Windows 10 한 대).
-> **Windows 성능 세트(1·10·61분), LGPL FFmpeg 번들, 백신/SmartScreen(W8–W10)은 NOT_RUN** 이고 크로스 플랫폼 출력의 샘플 단위 비교(W6)는 부분만 했다.
+> **U1 전체 검증은 완료되지 않았다.** macOS(arm64)는 검증했고, **Windows(x86_64)는 호환성 세트(39개 픽스처)를 실행**했다(2026-11-16, Windows 10 한 대). 같은 날 LGPL 후보 빌드로 호환성 세트를 다시 돌렸고 출력 일부를 샘플 단위로 비교했다.
+> **Windows 성능 세트(1·10·61분, W8)는 NOT_RUN.** LGPL 번들(W9)은 후보 **정적** 빌드만 봤고(우리 최소 빌드 아님), 백신/SmartScreen(W10)은 SmartScreen 경로를 시험하지 못했다. 크로스 플랫폼 샘플 비교(W6)는 48/151개만 했고 ±1 LSB 차이의 원인은 미확인이다.
 > 어느 후보도 채택하지 않았다. 아래 추천은 macOS 증거와 Windows 호환성 결과에 근거한 **잠정** 의견이며 최종 선택은 사용자 결정이다.
 > 라이선스는 사실만 기록했고 법률 결론은 내리지 않았다.
 
 표기: 각 섹션의 **상태**는 `PASS / FAIL / NOT_RUN / NOT_APPLICABLE` 중 하나로, 플랫폼별로 나눠 적었다. 실제로 확인하지 않은 것은 PASS 로 적지 않았다.
-원자료: `results/compatibility.csv`, `audio_quality.csv`, `performance.csv`, `decoder_compare.csv` (macOS 행 + Windows 행; Windows 성능 세트 자리는 `PERF_SET`/`ALL` 의 `NOT_RUN` 표식 행), `results/macos/`, `results/windows/`, `results/macos/lgpl_ffmpeg/`.
+원자료: `results/compatibility.csv`, `audio_quality.csv`, `performance.csv`, `decoder_compare.csv` (macOS 행 + Windows 행; Windows 성능 세트 자리는 `PERF_SET`/`ALL` 의 `NOT_RUN` 표식 행), `results/macos/`, `results/windows/`, `results/windows_lgpl/`(Windows LGPL 후보 빌드 재실행 — 합본 CSV 에는 넣지 않았다), `results/macos/lgpl_ffmpeg/`.
 
 ---
 
 ## 1. Executive Summary
 
-**상태: macOS = PASS(실험 수행 완료) · Windows = 부분 실행(호환성·출력 규격·반복성 PASS, 성능·번들·백신 NOT_RUN) → U1 = 미완료**
+**상태: macOS = PASS(실험 수행 완료) · Windows = 부분 실행(호환성·출력 규격·반복성 PASS, W6·W9·W10 부분, 성능 W8 NOT_RUN) → U1 = 미완료**
 
 | # | 발견 | 근거 |
 |---|---|---|
@@ -24,7 +24,7 @@
 | 6 | **설치된 FFmpeg(Homebrew)는 GPLv3 이고 의존 라이브러리 20개 39.5 MB 라 번들 대상이 아니다.** LGPL 전용 최소 빌드를 소스에서 직접 만들어 같은 테스트를 통과시켰다: `ffmpeg` 2.77 MB, `ffprobe` 2.59 MB, 링크 대상은 macOS 시스템 프레임워크뿐. Symphonia 는 바이너리에 **+1.31 MB** | §13, §15 |
 | 7 | 최소 FFmpeg 빌드는 **컴포넌트 이름을 틀려도 configure 가 경고하지 않고** 실행 시점에 전부 실패한다(이번에 실제로 겪음) | §17 |
 | 8 | 공통 후처리 계층을 쓴 결과 모든 출력이 WAV/16 kHz/mono/S16LE, 클리핑·NaN 0, DC 오프셋 최대 0.00015, **3회 반복 175건 전부 SHA 동일**. FFmpeg 가 직접 다운믹스하면(5.1) 가중치가 달라 진폭이 틀어진다 | §8, §10 |
-| 9 | **Windows 10 x86_64 에서도 호환성·품질 판정이 macOS 와 완전히 같았다**(168행 짝 비교에서 판정·사용 디코더·fallback·오류 분류 차이 0건, 품질 FAIL 5건도 같음). 출력 규격 위반 0, 3회 반복 불안정 0. 출력 SHA 는 출력이 있는 151쌍 중 87쌍이 다르지만 모두 **샘플 수가 같고** 레벨 차이는 부동소수점 수준이다(원인 **미확인**, FFmpeg 를 쓰지 않는 Symphonia 단독 경로도 18/34 가 다름). Windows 에서 FFmpeg 프로세스 기동은 짧은 파일에서 **약 160~240 ms**(macOS 40~77 ms) — 비교용 GPL 빌드·다른 하드웨어라 절대 비교는 하지 않음. **성능 세트·LGPL 번들·백신은 하지 않았다** | §14 |
+| 9 | **Windows 10 x86_64 에서도 호환성·품질 판정이 macOS 와 완전히 같았다**(168행 짝 비교에서 판정·사용 디코더·fallback·오류 분류 차이 0건, 품질 FAIL 5건도 같음). 출력 규격 위반 0, 3회 반복 불안정 0. 출력 SHA 는 출력이 있는 151쌍 중 87쌍이 다르지만 모두 **샘플 수가 같다.** 그중 48개를 샘플 단위로 비교하니 41개가 **±1 LSB(S16) 이내로만** 달랐다(원인 **미확인**, FFmpeg 를 쓰지 않는 Symphonia 단독 경로도 다름, 허용 기준은 미정). Windows 에서 FFmpeg 프로세스 기동은 짧은 파일에서 **약 160~240 ms**(macOS 40~77 ms) — 다른 하드웨어라 절대 비교는 하지 않음. **LGPL 후보 정적 빌드(BtbN)로 호환성 세트를 다시 돌려도 판정이 macOS·GPL 빌드와 같았고 151개 출력이 GPL 빌드와 바이트 동일**했다(최소 빌드가 아니라 크기 근거는 아님, 132 MB). **성능 세트는 하지 않았고(W8), SmartScreen 경로는 시험하지 못했다(W10)** | §14 |
 
 **잠정 추천은 §19**, 사용자가 정해야 할 사항은 **§20** 이다.
 
@@ -34,18 +34,18 @@
 |---|---|---|---|---|
 | 1 환경 조사 | PASS | | 9 출력 검증기 | PASS |
 | 2 문서·라이선스 조사 | PASS (법률 판단 제외) | | 10 호환성 테스트 | macOS PASS / Windows PASS (39개 세트) |
-| 3 실험 프로젝트 | PASS | | 11 음질·시간축 | macOS PASS / Windows PASS, 샘플 단위 비교는 부분(W6) |
+| 3 실험 프로젝트 | PASS | | 11 음질·시간축 | macOS PASS / Windows PASS, 크로스 플랫폼 샘플 비교(W6)는 표본 48/151 — ±1 LSB, 원인 미확인 |
 | 4 픽스처·SHA | macOS PASS / Windows 에서 45개 SHA 일치 PASS | | 12 성능 | macOS PASS / Windows 짧은 파일만, 1·10·61분 NOT_RUN |
 | 5 Symphonia | PASS | | 13 macOS 정리 | PASS |
-| 6 FFmpeg | PASS | | 14 Windows 재현 준비 | PASS (실행 중 스크립트 결함 4건 발견 → 수정함, 재실행 전 미검증, §14) |
-| 7 공통 PCM 계층 | PASS | | 15 Windows 테스트 | **부분 실행** (W1–W7 / W8–W10 NOT_RUN) |
+| 6 FFmpeg | PASS | | 14 Windows 재현 준비 | PASS (실행 중 스크립트 결함 5건 발견 → 수정함. 재실행 경로 일부만 Windows 에서 확인, §14) |
+| 7 공통 PCM 계층 | PASS | | 15 Windows 테스트 | **부분 실행** (W1–W5·W7 PASS / W6·W9·W10 부분 / W8 NOT_RUN) |
 | 8 Hybrid | PASS | | 16 보고서 | PASS |
 
 ---
 
 ## 2. Tested Environments
 
-**상태: macOS = PASS · Windows = 부분 실행 (호환성 세트만)**
+**상태: macOS = PASS · Windows = 부분 실행 (호환성 세트 + LGPL 후보 재실행 + 표본 비교)**
 
 | 항목 | macOS (실행함) | Windows (일부 실행함) |
 |---|---|---|
@@ -53,10 +53,10 @@
 | OS | macOS 26.6.2 (25G83), arm64 | Windows 10 Pro build 19045, x86_64 |
 | Rust / 컴파일러 | rustc 1.99.1, cargo 1.99.1, Apple clang 21.0.0 | rustc 1.100.0 (2026-11-09), MSVC (VS Build Tools C++ 워크로드) |
 | 기준 FFmpeg | Homebrew ffmpeg 9.0.2_1 (**GPLv3+**, shared) | Gyan.FFmpeg Essentials 9.0.1 (**GPLv3**, 정적) — 비교 기준용 |
-| 번들 검증 FFmpeg | 소스 9.0.2 에서 직접 빌드한 LGPL 전용 최소 빌드 (정적) | **NOT_RUN** (LGPL 빌드를 만들거나 받지 않음) |
+| 번들 검증 FFmpeg | 소스 9.0.2 에서 직접 빌드한 LGPL 전용 최소 빌드 (정적) | **후보 정적 빌드만**: BtbN `n9.0.2-57-gd838f9f9ae-20261115` LGPL(v3 이상) win64, 132 MB, 외부 라이브러리 42개. **우리 최소 빌드(MSYS2)는 만들지 않음 → NOT_RUN** |
 
-Windows 는 실제 Windows 10 PC 에서 사용자가 `scripts/windows_run.ps1 -SkipPerf` 로 실행했다. Rust(1.99.1 / 1.100.0)와 FFmpeg(9.0.2 / 9.0.1) 버전이 플랫폼마다 다르다.
-Windows 에서 설치한 FFmpeg 은 GPL 빌드라 **W9(번들 가능성)의 근거가 아니다.** 결과의 Windows 사용자 이름은 `<user>` 로 지웠다. 자세한 항목별 결과는 `results/windows/WINDOWS_CHECKLIST.md`.
+Windows 는 실제 Windows 10 PC 에서 사용자가 `scripts/windows_run.ps1 -SkipPerf` 로 실행했다. Rust(1.99.1 / 1.100.0)와 FFmpeg(9.0.2 / 9.0.1 / BtbN 9.0.2+57커밋) 버전이 플랫폼마다 다르다.
+Windows 에서 설치한 Gyan FFmpeg 은 GPL 빌드라 **W9(번들 가능성)의 근거가 아니다.** BtbN LGPL 빌드는 번들 후보의 사실 확인용이지만 정적 빌드라 **크기 근거는 아니다.** 결과의 Windows 사용자 이름은 `<user>` 로 지웠다. 자세한 항목별 결과는 `results/windows/WINDOWS_CHECKLIST.md`.
 macOS 쪽에서 Wine 이 설치돼 있으나 실제 Windows 가 아니고 arm64 이므로 검증으로 인정하지 않았다. 측정은 **디스크 캐시가 데워진(warm) 상태**, 다른 무거운 작업이 없는 조건에서 했다(일부 실행 중 문서 작성 같은 가벼운 작업이 있었음).
 
 ## 3. Dependency Versions
@@ -101,7 +101,7 @@ Symphonia 소스 확인: isomp4 는 `elst`/`mdhd.language` 를 파싱만 하고 
 
 ## 6. FFmpeg Compatibility
 
-**상태: macOS = PASS · Windows = PASS (Gyan GPL 9.0.1, 비교 기준용 / LGPL 최소 빌드는 NOT_RUN)**
+**상태: macOS = PASS · Windows = PASS (Gyan GPL 9.0.1 = 비교 기준용, BtbN LGPL 후보 정적 빌드로 재실행해도 같음 / 우리 LGPL 최소 빌드는 NOT_RUN)**
 
 | 빌드 | `ffmpeg`(공통 후처리) | `ffmpeg-native`(참고) | 비고 |
 |---|---|---|---|
@@ -294,7 +294,7 @@ Windows 짧은 파일의 자기 프로세스 최대 working set 은 중앙값 9.
 
 ## 14. Windows Test Run and Packaging
 
-**상태: 호환성 세트 실행(W1–W5, W7) = PASS · 샘플 단위 비교(W6) = PARTIAL · 패키징(W8 성능, W9 LGPL 번들, W10 백신/SmartScreen) = NOT_RUN**
+**상태: 호환성 세트 실행(W1–W5, W7) = PASS · 샘플 단위 비교(W6) = PARTIAL(표본 측정, 원인 미확인) · LGPL 번들(W9) = PARTIAL(후보 정적 빌드만) · 백신/SmartScreen(W10) = PARTIAL(증거 약함) · 성능(W8) = NOT_RUN**
 
 ### 14.1 실행한 것 (2026-11-16, Windows 10 x86_64, `windows_run.ps1 -SkipPerf`)
 
@@ -305,23 +305,38 @@ Windows 짧은 파일의 자기 프로세스 최대 working set 은 중앙값 9.
 | W3 | 호환성 | PASS — 4모드 × 42건(39 픽스처) = 168행을 macOS 와 (픽스처, 트랙, 모드)로 짝지어 판정·디코더·fallback·오류 분류 차이 **0건** |
 | W4 | 출력 규격 | PASS — 위반 0건 |
 | W5 | 3회 반복 | PASS — 불안정 그룹 0건 |
-| W6 | 크로스 플랫폼 샘플 일치 | **PARTIAL** — 출력이 있는 151쌍 중 87쌍의 SHA 가 다르다. 87쌍 모두 샘플 수가 같고 레벨(RMS·peak·DC) 차이는 부동소수점 수준. **샘플 단위 상관은 계산하지 않았다.** 원인은 추정(Rust 쪽 부동소수점/SIMD 경로)이며 [UNVERIFIED] |
+| W6 | 크로스 플랫폼 샘플 일치 | **PARTIAL** — 출력이 있는 151쌍 중 87쌍의 SHA 가 다르고 모두 샘플 수가 같다. 그중 12개 픽스처 48개 파일을 샘플 단위로 비교(`compare_wavs.py`)하니 **41개 DIFFERENT, 7개 IDENTICAL, 차이는 전부 최대 1 LSB**(다른 샘플 0.06–0.41 %, RMS 차이 0.024–0.064 LSB, 신호 대 차이 101–111 dB). symphonia 단독 경로도 11/12 가 다르다. 원인은 추정(Rust 쪽 부동소수점/SIMD, rustc 버전, CPU 구조)이며 [UNVERIFIED]. 나머지 103개는 샘플 비교를 하지 않았고, ±1 LSB 를 같다고 볼지의 기준은 없다 → PASS 로 적지 않음 |
 | W7 | 공백·한글 경로 | PASS (수동 실행) — symphonia/ffmpeg/hybrid 3/3 성공. 스크립트의 자동 경로 테스트는 아래 문제 1 때문에 실패 |
 
 `peak_rss_children_kb`·`cpu_user_s`·`cpu_sys_s` 는 Windows 에서 null 이다(자식 프로세스 자원은 측정하지 않음). 짧은 파일 시간은 §11.
 
-### 14.2 하지 못한 것 (NOT_RUN)
+### 14.2 LGPL 후보 빌드 확인 (W9, W10 — 같은 날 추가 실행)
 
-- **W8** 1·10·61분 성능 (`-SkipPerf`).
-- **W9** x86_64 LGPL FFmpeg 빌드/다운로드, 바이너리 용량, `dumpbin /dependents` DLL 목록, `-L`, `-buildconf`. **설치한 Gyan GPL 빌드는 번들 후보가 아니므로 대체하지 못한다.**
-- **W10** 백신/SmartScreen 반응, 설치 경로 권한.
+자세한 표는 `results/windows/WINDOWS_CHECKLIST.md`, 원자료는 `results/windows_lgpl/`.
+
+| # | 항목 | 결과 |
+|---|---|---|
+| W9 | 후보 빌드 사실 | **PARTIAL** — BtbN `ffmpeg-n9.0-latest-win64-lgpl-9.0.zip`(`n9.0.2-57-gd838f9f9ae-20261115`, 정적). `-L` = LGPL v3 이상, `--enable-version3` 있음, `--enable-gpl`·`--enable-nonfree` 없음, 외부 라이브러리 42개. ffmpeg.exe **132,056,064 B**. Authenticode 서명 없음. **정적 빌드라 최소 빌드의 크기를 대표하지 않는다.** 의존 DLL 목록은 `dumpbin` 이 없어 문자열 검색(근사치) → 믿지 않는다. zip 체크섬은 게시값과 대조하지 않았다. 외부 라이브러리별 라이선스는 조사하지 않았다 |
+| W9 | 호환성 재실행(후보 빌드) | **PASS(이 빌드 한정)** — 168행에서 판정·디코더·fallback·오류 분류가 macOS 와도, Gyan GPL 빌드와도 차이 0건. 151개 출력이 **Gyan 출력과 바이트 동일**. 짧은 파일의 ffmpeg 모드 시간은 Gyan 보다 14–17 % 느림(218.9 vs 190.7 ms, 원인 미확인) |
+| W9 | 우리 최소 빌드(MSYS2) | **NOT_RUN** — `scripts/build_ffmpeg_lgpl.sh` 의 Windows 경로는 한 번도 실행하지 않았다 |
+| W10 | 서명·표시·첫 실행 | **PARTIAL(증거 약함)** — 서명 없음. 같은 zip 에서 풀었는데 `ffmpeg.exe` 는 Zone.Identifier 가 없고 `ffprobe.exe` 는 `ZoneId=3`(원인 미확인). 첫 `-version` 269 ms, 이후 변환 중앙값 114 ms. 변환 6회 종료 코드 0 |
+| W10 | SmartScreen·백신 | **시험하지 못함** — 사용자가 ffmpeg.exe 를 실행했을 때 팝업은 없었지만 그 파일에는 인터넷 표시가 없어 SmartScreen 경로가 아니다. 이 PC 의 Defender 는 실시간 보호 `False`·시그니처 `0.0.0.0` 이라 탐지 0건이 의미가 작고, 알약·V3 Lite 기록은 조회하지 않았다 |
+
+### 14.3 하지 못한 것 (NOT_RUN)
+
+- **W8** 1·10·61분 성능 (`-SkipPerf` 로 건너뜀, `-PerfOnly` 는 아직 실행 전).
+- **W9** 우리 최소 LGPL 빌드(MSYS2), 실제 DLL 목록(`dumpbin /dependents`), 체크섬 대조. **설치한 Gyan GPL 빌드는 번들 후보가 아니므로 대체하지 못한다.**
+- **W10** 인터넷 표시가 붙은 exe 의 SmartScreen 반응, Defender 가 켜진 환경, 앱과 함께 설치할 때의 경로 권한.
 - 긴 경로(260자 초과), 성능 세트의 출력 파일 삭제 실패 여부, 빈 파일 사례, CRLF 체크아웃.
 
-### 14.3 실행 중 발견한 `windows_run.ps1` 문제 (스크립트는 고쳤다 — **Windows 에서 다시 실행하기 전까지 [UNVERIFIED]**)
+### 14.4 실행 중 발견한 스크립트 문제 (고쳤다 — **일부만 Windows 에서 확인, 나머지는 [UNVERIFIED]**)
 
-macOS 에는 PowerShell 이 없어 구문 검사조차 하지 못했다 (괄호 짝만 확인). 고친 스크립트가 맞는지는 Windows 에서 돌려 봐야 안다. 아래 번호별 수정:
-BOM 추가(1), `[Console]::OutputEncoding` 을 UTF-8 로 두고 BOM 없는 UTF-8 로 기록(2), `$LASTEXITCODE` 검사(3), 경로 테스트를 `try/finally` 로 감싸 임시 폴더를 정리(4).
+macOS 에는 PowerShell 이 없어 구문 검사조차 하지 못했다 (괄호 짝만 확인). 아래 번호별 수정:
+BOM 추가(1), `[Console]::OutputEncoding` 을 UTF-8 로 두고 BOM 없는 UTF-8 로 기록(2), `$LASTEXITCODE` 검사(3), 경로 테스트를 `try/finally` 로 감싸 임시 폴더를 정리(4), `windows_bundle_check.ps1` 의 `-L` 캡처에 `-hide_banner` 추가(5).
 W8·W9·W10 용으로 `-PerfOnly`, `-ResultsDir`, `-SkipPathTest` 를 더했고, 새 스크립트 `windows_bundle_check.ps1`(W9/W10 기록용)과 `compare_wavs.py`(W6 샘플 비교)를 추가했다.
+
+**Windows 에서 확인한 것:** 고친 `windows_run.ps1` 을 `-SkipPerf -SkipPathTest -ResultsDir results\windows_lgpl` 로 실행해 끝까지 정상 종료(cargo 빌드·`verify-fixtures` 45 ok·39 픽스처 매트릭스). `windows_bundle_check.ps1` 도 실행됐고, 그때 `-L` 캡처에 버전 배너가 섞이는 결함(5)이 드러났다(`bundle_check.json` 의 `license_lines`; 본문은 `ffmpeg_license.txt`).
+**확인하지 못한 것 [UNVERIFIED]:** `-PerfOnly`, 자동 경로 테스트(한글 리터럴·`try/finally`), cargo 실패 시 중단, 수정한 `-hide_banner`.
 
 처음 실행에서 나온 문제:
 
@@ -347,7 +362,7 @@ macOS 에서 한 공백·한글 경로 시험은 Windows 결과를 **대신하�
 
 ## 16. Known Limitations
 
-- **Windows 부분 검증.** 호환성 세트(39개 픽스처)는 실행했지만 성능(1·10·61분), LGPL FFmpeg 번들, 백신/SmartScreen 은 하지 않았다. Windows 머신은 한 대(Win10, i5-7400)이고 Windows 11 은 시험하지 않았다. 크로스 플랫폼 출력 SHA 는 151쌍 중 87쌍이 다르며 샘플 단위 비교는 하지 않았다.
+- **Windows 부분 검증.** 호환성 세트(39개 픽스처)와 LGPL 후보(정적) 빌드 재실행은 했지만 성능(1·10·61분)은 하지 않았고, 우리 최소 LGPL 빌드(MSYS2)는 만들지 않았으며, 백신/SmartScreen 은 SmartScreen 경로를 시험하지 못했다. Windows 머신은 한 대(Win10, i5-7400, Defender 실시간 보호 꺼짐)이고 Windows 11 은 시험하지 않았다. 크로스 플랫폼 출력 SHA 는 151쌍 중 87쌍이 다르며, 48개를 샘플 단위로 비교해 ±1 LSB 차이를 확인했다(원인 미확인, 허용 기준 미정, 나머지 103개는 미비교).
 - 픽스처는 합성 신호이고 FFmpeg 인코더 산출물이다. 실제 사용자 파일(다른 인코더, HE-AAC SBR/PS, 가변 프레임, 복잡한 edit list)은 포함되지 않았다.
 - **잘린 파일이 조용히 성공한다**: F17(MP3 60% 절단)은 두 디코더 모두 오류·경고 없이 5.96~5.98초만 출력(10초 중). 앱이 컨테이너 선언 길이와 비교해야 알 수 있다.
 - 시간축 허용 오차(AAC 70 ms)는 이 실험이 정한 가정이며 넓다. FFmpeg 의 MKV AAC +125 샘플은 원인을 조사하지 않았다.
@@ -372,9 +387,11 @@ macOS 에서 한 공백·한글 경로 시험은 Windows 결과를 **대신하�
 
 | 항목 | 상태 |
 |---|---|
-| Windows 성능(1·10·61분), LGPL FFmpeg 번들(크기·DLL·`-buildconf`), 백신/SmartScreen (W8–W10) | **NOT_RUN** |
+| Windows 성능(1·10·61분) (W8) | **NOT_RUN** |
+| LGPL FFmpeg 번들 (W9) | **PARTIAL** — 후보 정적 빌드(132 MB)의 사실·호환성만. 최소 빌드(MSYS2)·실제 DLL 목록(`dumpbin`)·체크섬 대조 NOT_RUN |
+| 백신/SmartScreen (W10) | **PARTIAL(증거 약함)** — 인터넷 표시가 붙은 exe 의 SmartScreen 경로, Defender 가 켜진 환경 NOT_RUN. ffmpeg.exe 와 ffprobe.exe 의 Zone.Identifier 가 다른 이유 미확인 |
 | Windows 빌드·픽스처 SHA·호환성·출력 규격·반복성·공백/한글 경로 (W1–W5, W7) | PASS (§14) — 단 경로 테스트는 수동 실행 |
-| 크로스 플랫폼 출력의 샘플 단위 비교 (W6) | PARTIAL — 샘플 수·레벨만 비교, 상관·최대 샘플 차이 미계산 |
+| 크로스 플랫폼 출력의 샘플 단위 비교 (W6) | PARTIAL — 48/151개 비교: 41개가 ±1 LSB 로 다름, 원인 미확인(Rust 부동소수점/SIMD·rustc·CPU 구조 추정 [UNVERIFIED]), 허용 기준 미정 |
 | Windows 11, 다른 x86_64 머신, 긴 경로(260자 초과) | NOT_RUN |
 | 콜드 디스크 캐시 성능 | NOT_RUN (`purge` 관리자 권한 필요) |
 | OutOfMemory 처리, 실제 I/O 장애(읽기 도중 실패) | NOT_RUN |
@@ -388,14 +405,14 @@ macOS 에서 한 공백·한글 경로 시험은 Windows 결과를 **대신하�
 
 ## 19. Recommendation
 
-**상태: 잠정 의견 (Windows 호환성은 macOS 와 같았으나 번들·성능·백신이 NOT_RUN 이라 확정 불가). 최종 선택은 사용자 결정.**
+**상태: 잠정 의견 (Windows 호환성은 macOS 와 같았고 LGPL 후보 빌드도 같은 출력을 냈으나, 성능(W8)이 NOT_RUN 이고 최소 빌드·SmartScreen 은 확인하지 못해 확정 불가). 최종 선택은 사용자 결정.**
 Windows 호환성 결과는 아래 근거를 **바꾸지 않았다**: 두 플랫폼에서 판정이 같으므로 결함(AC-3/WMA/Opus 미지원, AAC 트리밍 누락, 기본 트랙 오선택)은 OS 와 무관하다.
 
 **잠정 추천: B — FFmpeg(LGPL 전용 최소 빌드, 별도 프로세스) + 공통 후처리 계층(Rust).** 근거:
 
 1. **지원 범위**: 이 실험에서 FFmpeg 는 전부 성공, Symphonia 는 미지원 4건(AC-3·WMA·Opus). 영상 파일(MKV/MP4)에서 AC-3/Opus 오디오는 흔하다. 다만 실제 사용자 파일의 형식 분포는 이번 실험으로 알 수 없다.
 2. **정확도**: FFmpeg 는 MP4 AAC gapless 를 적용하고(0 샘플 편차), 트랙 언어/기본 표시를 제공하며, 손상 헤더도 복구한다(F18). Symphonia 는 위 세 가지에서 결함이 확인됐고, 그중 **기본 트랙 오선택은 오류 없이 지나간다.**
-3. **Hybrid 의 이점이 작다**: 속도는 병목이 아니고(61분 2초), 짧은 파일의 프로세스 기동 비용(macOS 40~77 ms, Windows 비교용 GPL 빌드 160~240 ms)도 UI 지연으로는 크지 않다 — 단 Windows 의 LGPL 최소 빌드로는 재지 않았다. 그런데 Hybrid 도 AC-3/Opus 때문에 **FFmpeg 를 결국 번들해야** 하므로 FFmpeg 의 용량·LGPL 부담은 어차피 진다. 그 위에 Symphonia 를 얹으면 +1.3 MB, MPL 고지, 코드 경로 두 개, **형식별로 다른 시간축 기준**과 "오류 없는 오동작"이 따라온다.
+3. **Hybrid 의 이점이 작다**: 속도는 병목이 아니고(61분 2초), 짧은 파일의 프로세스 기동 비용(macOS 40~77 ms, Windows 비교용 GPL 빌드 160~240 ms, Windows LGPL 후보 정적 빌드는 ffmpeg 모드 중앙값 약 220 ms)도 UI 지연으로는 크지 않다 — 단 Windows 의 LGPL **최소** 빌드로는 재지 않았다. 그런데 Hybrid 도 AC-3/Opus 때문에 **FFmpeg 를 결국 번들해야** 하므로 FFmpeg 의 용량·LGPL 부담은 어차피 진다. 그 위에 Symphonia 를 얹으면 +1.3 MB, MPL 고지, 코드 경로 두 개, **형식별로 다른 시간축 기준**과 "오류 없는 오동작"이 따라온다.
 4. **번들 가능성은 확인됨(macOS)**: LGPL 최소 빌드 2.8 MB, 시스템 프레임워크만 의존, 같은 테스트 통과.
 
 **추천을 뒤집을 수 있는 조건**
@@ -414,7 +431,7 @@ Windows 호환성 결과는 아래 근거를 **바꾸지 않았다**: 두 플랫
 | D1 | 후보 채택: A / B / C | §19 |
 | D2 | 입력 형식 범위: AC-3·E-AC-3·Opus·WMA 지원이 필수인가 | A 의 성립 여부를 가름 |
 | D3 | LGPL FFmpeg 번들의 **법률 검토** 진행 여부와 배포 구조(sidecar vs 링크) | §15, 법률 판단은 이 실험 밖 |
-| D4 | **남은 Windows 검증(W8–W10)을 할지**: 성능 세트 실행 / x86_64 LGPL FFmpeg 번들 검증 / 백신·SmartScreen 확인. 그리고 W6 샘플 단위 비교 — **사용자가 진행을 승인했고(2026-11-16) `windows_run.ps1` 수정·새 스크립트도 준비했다. 아직 Windows 에서 실행 전** | U1 완료 조건. 호환성 세트(W1–W5, W7)는 이미 실행함 |
+| D4 | **남은 Windows 검증(W8–W10)을 할지**: 성능 세트 실행 / x86_64 LGPL FFmpeg 번들 검증 / 백신·SmartScreen 확인. 그리고 W6 샘플 단위 비교 — **사용자가 진행을 승인했고(2026-11-16) W9·W10 일부와 W6 표본은 실행·수집했다(§14.2). 남은 것: W8 성능 세트, W9 최소 빌드·`dumpbin`·체크섬 대조, W10 SmartScreen 경로, W6 나머지 103개와 허용 기준** | U1 완료 조건. 호환성 세트(W1–W5, W7)는 이미 실행함 |
 | D5 | 다운믹스 정책(동일 평균 / 위상·에너지 기반 채널 선택 / LFE 처리) | 위상 반전 소실, −6 dB, 5.1 |
 | D6 | 시간축 허용 기준(특히 AAC 23 ms 상수 오프셋 허용 여부) | A 선택 시 필수 |
 | D7 | 트랙 선택 UX 요구(기본 트랙·언어 표시 필요 여부) | Symphonia 결함 영향 |
